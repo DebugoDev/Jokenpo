@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const teamNameInput = document.getElementById('teamNameInput');
     const setTeamNameButton = document.getElementById('setTeamNameButton');
-    const pedraButton = document.getElementById('pedraButton');
-    const papelButton = document.getElementById('papelButton');
-    const tesouraButton = document.getElementById('tesouraButton');
+    const pedraButton = document.getElementById('rockButton');
+    const papelButton = document.getElementById('paperButton');
+    const tesouraButton = document.getElementById('scissorsButton');
     const messageDisplay = document.getElementById('message');
     const playerTeamNameDisplay = document.getElementById('player-team-name');
     const playerMoveDisplay = document.getElementById('player-move');
