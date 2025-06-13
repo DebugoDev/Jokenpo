@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    
+    <script src="./script.js"></script>
     <title>Jokenpo Competitivo</title>
 </head>
-
 <body>
     <div class="container">
-        <h1>Jokenpo Competitivo</h1>
-        <p>Pedra, Papel ou Tesoura? A equipe vencedora ganha a rodada!</p>
+        <h1>Jokenpô Competitivo</h1>
+        <p>Pedra, Papel ou Tesoura?</p>
+        <p>A equipe vencedora ganha a rodada!</p>
 
         <form class="team-info">
             <label for="teamNameInput">Seu Codinome de Equipe:</label>
@@ -21,9 +20,15 @@
         </form>
 
         <div class="jokenpo-buttons">
-            <button id="pedraButton" data-move="pedra" disabled>Pedra</button>
-            <button id="papelButton" data-move="papel" disabled>Papel</button>
-            <button id="tesouraButton" data-move="tesoura" disabled>Tesoura</button>
+            <button id="rockButton" data-move="pedra" disabled>
+                <img src="./assets/rock.png" alt="Pedra" />
+            </button>
+            <button id="paperButton" data-move="papel" disabled>
+                <img src="./assets//paper.png" alt="Papel" />
+            </button>
+            <button id="scissorsButton" data-move="tesoura" disabled>
+                <img src="./assets/scissors.png" alt="Tesoura" />
+            </button>
         </div>
 
         <p id="message"></p>
@@ -47,5 +52,4 @@
         <p>Rodada: <strong><span id="round-counter">0</span></strong></p>
     </div>
 </body>
-
 </html>
