@@ -85,6 +85,7 @@ body {
   
   .jokenpo-buttons button {
     all: unset;
+    background-color: transparent;
   }
   
   .jokenpo-buttons img {
