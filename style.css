@@ -67,12 +67,13 @@ body {
   
   button:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    color: inherit;
   }
   
   button:hover:enabled {
     transform: scale(1.05);
     background-color: #c10710;
+    color: inherit;
   }
   
   .jokenpo-buttons {
@@ -83,8 +84,7 @@ body {
   }
   
   .jokenpo-buttons button {
-    background: transparent;
-    padding: 0;
+    all: unset;
   }
   
   .jokenpo-buttons img {
