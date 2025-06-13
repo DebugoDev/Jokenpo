@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(SERVER_URL, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
+            console.log('Resposta do servidor:', data);
             updateUI(data);
 
             if (data.status === 'game_over') {
