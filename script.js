@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tenta carregar o codinome da equipe
     const storedTeamName = localStorage.getItem('teamName');
     if (storedTeamName) {
+        console.log("Passou aqui")
         teamNameInput.value = storedTeamName;
         currentTeamName = storedTeamName;
         playerTeamNameDisplay.textContent = currentTeamName;
@@ -51,7 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tesouraButton.disabled = true;
     }
 
-    setTeamNameButton.addEventListener('click', () => {
+    setTeamNameButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        
         currentTeamName = teamNameInput.value.trim();
         if (currentTeamName) {
             localStorage.setItem('teamName', currentTeamName);
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(SERVER_URL, {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
