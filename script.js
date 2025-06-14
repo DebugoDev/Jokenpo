@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    var playerId = localStorage.getItem('playerId');
+    const playerId = localStorage.getItem('playerId');
     if (!playerId) {
-        playerId = 'browser_' + Math.random().toString(36).substring(2, 9);
+        playerId = 'browser_' + Math.random().toString(36).substr(2, 9);
         localStorage.setItem('playerId', playerId);
     }
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playerTeamNameDisplay.textContent = currentTeamName;
         enableGameInteraction();
         gameStatusDisplay.textContent = 'Codinome carregado. Pronto para jogar Jokenpo!';
-        sendJokenpoMove()
+        sendJokenpoMove(null)
     } else {
         gameStatusDisplay.textContent = 'Por favor, insira o codinome da sua equipe.';
     }
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTeamNameButton.addEventListener('click', (event) => {
         event.preventDefault();
-        
+
         currentTeamName = teamNameInput.value.trim();
         if (currentTeamName) {
             localStorage.setItem('teamName', currentTeamName);
@@ -85,60 +85,65 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function sendJokenpoMove(playerMove) {
-    if (!currentTeamName) {
-        alert('Por favor, confirme o codinome da sua equipe primeiro.');
-        return;
+        if (!currentTeamName) {
+            alert('Por favor, confirme o codinome da sua equipe primeiro.');
+            return;
+        }
+
+        try {
+
+            if (!playerMove) {
+                console.warn("Nenhuma jogada foi selecionada. Requisição cancelada.");
+                return;
+            }
+            const payload = {
+                playerId: String(playerId).trim(),
+                teamName: String(currentTeamName).trim()
+            };
+
+            if (typeof playerMove === 'string' && ['Pedra', 'Papel', 'Tesoura'].includes(playerMove)) {
+                payload.playerMove = playerMove;
+            }
+
+            console.log('Payload enviado:', payload);
+
+            const response = await fetch(SERVER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const responseText = await response.text(); // captura resposta 
+            console.log('Resposta do servidor:', responseText);
+
+            if (!response.ok) {
+                throw new Error(`Erro HTTP! Status: ${response.status}`);
+            }
+
+            const data = JSON.parse(responseText); // converte para JSON válido
+            console.log('Resposta do servidor (JSON):', data);
+            updateUI(data);
+
+            if (data.status === 'game_over') {
+                setTimeout(() => {
+                    playerMadeMove = false;
+                    enableGameInteraction();
+                    playerMoveDisplay.textContent = '?';
+                    opponentMoveDisplay.textContent = '?';
+                    winnerTeamNameDisplay.textContent = '';
+                    messageDisplay.textContent = 'Nova rodada! Faça sua jogada.';
+                }, 5000);
+            }
+
+        } catch (error) {
+            console.error('Erro ao enviar jogada Jokenpo:', error);
+            messageDisplay.textContent = 'Erro ao conectar ao servidor. Verifique o console.';
+            enableGameInteraction();
+            playerMadeMove = false;
+        }
     }
-
-    try {
-        const payload = {
-            playerId: String(playerId).trim(),
-            teamName: String(currentTeamName).trim()
-        };
-
-        if (typeof playerMove === 'string' && ['pedra', 'papel', 'tesoura'].includes(playerMove)) {
-            payload.playerMove = playerMove;
-        }
-
-        console.log('Payload enviado:', payload);
-
-        const response = await fetch(SERVER_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const responseText = await response.text(); // captura resposta bruta
-        console.log('Resposta bruta do servidor:', responseText);
-
-        if (!response.ok) {
-            throw new Error(`Erro HTTP! Status: ${response.status}`);
-        }
-
-        const data = JSON.parse(responseText); // converte para JSON válido
-        console.log('Resposta do servidor (JSON):', data);
-        updateUI(data);
-
-        if (data.status === 'game_over') {
-            setTimeout(() => {
-                playerMadeMove = false;
-                enableGameInteraction();
-                playerMoveDisplay.textContent = '?';
-                opponentMoveDisplay.textContent = '?';
-                winnerTeamNameDisplay.textContent = '';
-                messageDisplay.textContent = 'Nova rodada! Faça sua jogada.';
-            }, 5000);
-        }
-
-    } catch (error) {
-        console.error('Erro ao enviar jogada Jokenpo:', error);
-        messageDisplay.textContent = 'Erro ao conectar ao servidor. Verifique o console.';
-        enableGameInteraction();
-        playerMadeMove = false;
-    }
-}
 
 
     function updateUI(data) {
